@@ -36,19 +36,16 @@ function shuffleArray(array) {
 client.on('message', (channel, tags, message, self) => {
     if (self) return;
 
-console.log(tags);
 if (tags.vip || tags.mod || tags.badges.broadcaster) {
     switch (message.toLowerCase()) {
         case '!newgame':
             client.say(channel, 'Une nouvelle partie de Photo surprise a été lancée');
             itemsRemaining = items.slice(0);
-            console.log(itemsRemaining);
             break;
         case '!objet':
             shuffleArray(itemsRemaining);
             let item = itemsRemaining.pop();
             client.say(channel, 'Le nouvel objet est : ' + item);
-            console.log(itemsRemaining);
             break;
         default:
             break;
