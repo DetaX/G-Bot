@@ -12,8 +12,6 @@ const client = new tmi.Client({
         secure: true
     },
 
-    // Lack of the identity tags makes the bot anonymous and able to fetch messages from the channel
-    // for reading, supervision, spying, or viewing purposes only
     identity: {
         username: `${process.env.TWITCH_USERNAME}`,
         password: `oauth:${process.env.TWITCH_OAUTH}`
@@ -43,7 +41,7 @@ if (tags.vip || tags.mod || (tags.badges&&tags.badges.broadcaster)) {
             itemsRemaining = items.slice(0);
             break;
         case '!objet':
-            if (itemsRemaining.length > 0) {
+            if (itemsRemaining.length == 0) {
                 client.say(channel, 'La liste des items restants est vide, faites !newgame pour lancer une nouvelle partie de Photo surprise');
             }
             else {
@@ -51,7 +49,6 @@ if (tags.vip || tags.mod || (tags.badges&&tags.badges.broadcaster)) {
                 let item = itemsRemaining.pop();
                 client.say(channel, 'Le nouvel objet est : ' + item);
             }
-
             break;
         default:
             break;
