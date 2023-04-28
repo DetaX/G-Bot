@@ -2,9 +2,10 @@ require('dotenv').config();
 
 const tmi = require('tmi.js');
 
-const items = ["Spirit Box","Livre d'écriture fantomatique","Lecteur EMF","Lampe UV","Lampe de poche","Caméra vidéo","Projecteur D.O.T.S.","Bougie","Crucifix","Bâton lumineux","Caméra frontale","Détecteur de mouvement","Microphone parabolique","Sel","Pilules calmantes","Bâton d'encens","Capteur sonore","Lampe de poche puissante","Thermomètre","Trépied"]
+const items = ["Spirit Box","Livre d'écriture fantomatique","Lecteur EMF","Lampe UV","Caméra vidéo","Projecteur D.O.T.S.","Bougie","Crucifix","Bâton lumineux","Détecteur de mouvement","Microphone parabolique","Sel","Pilules calmantes","Bâton d'encens","Capteur sonore","Thermomètre","Trépied"]
 
 let itemsRemaining = [];
+let currentItems = [];
 const client = new tmi.Client({
     options: { debug: true, messagesLogLevel: "info" },
     connection: {
@@ -39,6 +40,7 @@ if (tags.vip || tags.mod || (tags.badges&&tags.badges.broadcaster)) {
         case '!newgame':
             client.say(channel, 'Une nouvelle partie de Photo surprise a été lancée');
             itemsRemaining = items.slice(0);
+            currentItems = [];
             break;
         case '!objet':
             if (itemsRemaining.length == 0) {
@@ -47,8 +49,13 @@ if (tags.vip || tags.mod || (tags.badges&&tags.badges.broadcaster)) {
             else {
                 shuffleArray(itemsRemaining);
                 let item = itemsRemaining.pop();
+                currentItems.push(item);
                 client.say(channel, 'Le nouvel objet est : ' + item);
             }
+            break;
+        case '!recap':
+            if (currentItems.length > 0) client.say(channel, 'Les objets disponibles sont : ' + currentItems.join(', '));
+            else client.say(channel, 'Aucun objet n\'est disponible pour le moment');
             break;
         default:
             break;
